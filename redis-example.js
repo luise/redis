@@ -1,4 +1,5 @@
-var redis = require("github.com/quilt/redis");
+const {createDeployment, Machine, githubKeys} = require("@quilt/quilt");
+var redis = require("./redis.js");
 
 var deployment = createDeployment({});
 

@@ -1,3 +1,4 @@
+const {LabelRule, Service, Container} = require("@quilt/quilt");
 var image = "quilt/redis";
 
 function Redis(nWorker, auth) {

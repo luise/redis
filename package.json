@@ -1,3 +1,9 @@
 {
-    "main": "./redis.js"
+  "name": "@quilt/redis",
+  "version": "0.0.1",
+  "main": "./redis.js",
+  "license": "MIT",
+  "dependencies": {
+    "@quilt/quilt": "quilt/quilt"
+  }
 }
