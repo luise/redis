@@ -1,11 +1,13 @@
 const {LabelRule, Service, Container} = require("@quilt/quilt");
+
+const port = 6379;
 var image = "quilt/redis";
 
 function Redis(nWorker, auth) {
     this.master = createMaster(auth);
     this.workers = createWorkers(nWorker, auth, this.master);
-    this.master.connect(6379, this.workers);
-    this.workers.connect(6379, this.master);
+    this.master.connect(port, this.workers);
+    this.workers.connect(port, this.master);
 
     this.exclusive = function() {
         this.master.place(new LabelRule(true, this.workers));
