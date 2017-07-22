@@ -1,5 +1,5 @@
 const {createDeployment, Machine, githubKeys} = require("@quilt/quilt");
-var redis = require("./redis.js");
+var Redis = require("./redis.js");
 
 var deployment = createDeployment({});
 
@@ -7,7 +7,7 @@ var nWorker = 1;
 
 // Boot redis with 2 workers and 1 master. AUTH_PASSWORD is used to secure
 // the redis connection
-var rds = new redis.Redis(nWorker, "AUTH_PASSWORD");
+var rds = new Redis(nWorker, "AUTH_PASSWORD");
 rds.exclusive();
 
 var baseMachine = new Machine({

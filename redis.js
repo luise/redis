@@ -34,4 +34,4 @@ function createWorkers(n, auth, master) {
     return new Service("redis-wk", refWorker.replicate(n));
 }
 
-module.exports.Redis = Redis;
+module.exports = Redis;
