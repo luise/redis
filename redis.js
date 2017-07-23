@@ -1,7 +1,7 @@
 const {Service, Container} = require("@quilt/quilt");
 
 const port = 6379;
-var image = "quilt/redis";
+const image = "quilt/redis";
 
 function Redis(nWorker, auth) {
     this.master = createMaster(auth);
