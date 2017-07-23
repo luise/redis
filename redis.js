@@ -6,8 +6,8 @@ var image = "quilt/redis";
 function Redis(nWorker, auth) {
     this.master = createMaster(auth);
     this.workers = createWorkers(nWorker, auth, this.master);
-    this.master.connect(port, this.workers);
-    this.workers.connect(port, this.master);
+    this.master.allowFrom(this.workers, port);
+    this.workers.allowFrom(this.master, port);
 
     this.deploy = function(deployment) {
         deployment.deploy([this.master, this.workers]);
