@@ -16,6 +16,12 @@ function Redis(nWorker, auth) {
     this.deploy = function(deployment) {
         deployment.deploy([this.master, this.workers]);
     }
+
+    // Only masters can accept write requests, so for simplicity, allowFrom
+    // only connects other services to the master.
+    this.allowFrom = function(senderService, port) {
+      this.master.allowFrom(senderService, port);
+    }
 }
 
 function createMaster(auth) {
