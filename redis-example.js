@@ -1,9 +1,9 @@
 const {createDeployment, Machine, githubKeys} = require("@quilt/quilt");
-var Redis = require("./redis.js");
+const Redis = require("./redis.js");
 
-var deployment = createDeployment({});
+const deployment = createDeployment();
 
-var nWorker = 1;
+const nWorker = 2;
 
 // Boot redis with 2 workers and 1 master. AUTH_PASSWORD is used to secure
 // the redis connection
@@ -14,6 +14,6 @@ var baseMachine = new Machine({
     sshKeys: githubKeys("ejj"), // Replace with your GitHub username.
 });
 
-deployment.deploy(baseMachine.asMaster())
-deployment.deploy(baseMachine.asWorker().replicate(nWorker + 1))
+deployment.deploy(baseMachine.asMaster());
+deployment.deploy(baseMachine.asWorker().replicate(nWorker));
 deployment.deploy(rds);
