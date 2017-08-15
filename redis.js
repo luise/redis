@@ -1,36 +1,40 @@
-const { Container, Service } = require('@quilt/quilt');
+const { Container, allow } = require('@quilt/quilt');
 
 const port = 6379;
 const image = 'quilt/redis';
 
 /**
- * Creates a service with a master Redis instance.
+ * Creates a master Redis container.
  * @param {string} auth - The password for autheticating with Redis.
- * @return {Service} - The Redis master service.
+ * @return {Container} The Redis master container.
  */
 function createMaster(auth) {
-  return new Service('redis-ms', [
-    new Container(image, ['run']).withEnv({
+  return new Container('redis-master', image, {
+    command: ['run'],
+    env: {
       ROLE: 'master',
       AUTH: auth,
-    }),
-  ]);
+    },
+  });
 }
 
 /**
- * Creates a service with replicated Redis workers.
+ * Creates replicated Redis workers.
  * @param {number} n - The desired number of workers.
  * @param {string} auth - The password for autheticating with Redis.
- * @param {Service} master - The master Redis service.
- * @return {Service} - The worker Redis service.
+ * @param {Container} master - The master Redis container.
+ * @return {Container[]} - The worker Redis containers.
  */
 function createWorkers(n, auth, master) {
-  const refWorker = new Container(image, ['run']).withEnv({
-    ROLE: 'worker',
-    AUTH: auth,
-    MASTER: master.hostname(),
+  const refWorker = new Container('redis-wk', image, {
+    command: ['run'],
+    env: {
+      ROLE: 'worker',
+      AUTH: auth,
+      MASTER: master.getHostname(),
+    },
   });
-  return new Service('redis-wk', refWorker.replicate(n));
+  return refWorker.replicate(n);
 }
 
 /**
@@ -42,16 +46,17 @@ function Redis(nWorker, auth) {
   this.master = createMaster(auth);
   this.workers = createWorkers(nWorker, auth, this.master);
   this.master.allowFrom(this.workers, port);
-  this.workers.allowFrom(this.master, port);
+  allow(this.master, this.workers, port);
 
   this.deploy = function deploy(deployment) {
-    deployment.deploy([this.master, this.workers]);
+    deployment.deploy(this.master);
+    deployment.deploy(this.workers);
   };
 
   // Only masters can accept write requests, so for simplicity, allowFrom
   // only connects other services to the master.
-  this.allowFrom = function allowFrom(senderService, allowPort) {
-    this.master.allowFrom(senderService, allowPort);
+  this.allowFrom = function allowFrom(src, allowPort) {
+    this.master.allowFrom(src, allowPort);
   };
 }
 
