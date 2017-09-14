@@ -26,15 +26,19 @@ function createMaster(auth) {
  * @return {Container[]} - The worker Redis containers.
  */
 function createWorkers(n, auth, master) {
-  const refWorker = new Container('redis-wk', image, {
-    command: ['run'],
-    env: {
-      ROLE: 'worker',
-      AUTH: auth,
-      MASTER: master.getHostname(),
-    },
-  });
-  return refWorker.replicate(n);
+  const workers = [];
+  for (let i = 0; i < n; i += 1) {
+    workers.push(
+      new Container('redis-wk', image, {
+        command: ['run'],
+        env: {
+          ROLE: 'worker',
+          AUTH: auth,
+          MASTER: master.getHostname(),
+        },
+      }));
+  }
+  return workers;
 }
 
 /**
