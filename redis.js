@@ -53,8 +53,8 @@ function Redis(nWorker, auth) {
   allow(this.master, this.workers, port);
 
   this.deploy = function deploy(deployment) {
-    deployment.deploy(this.master);
-    deployment.deploy(this.workers);
+    this.master.deploy(deployment);
+    this.workers.forEach(worker => worker.deploy(deployment));
   };
 
   // Only masters can accept write requests, so for simplicity, allowFrom

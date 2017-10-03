@@ -16,4 +16,4 @@ const baseMachine = new Machine({
 
 deployment.deploy(baseMachine.asMaster());
 deployment.deploy(baseMachine.asWorker().replicate(nWorker));
-deployment.deploy(rds);
+rds.deploy(deployment);
