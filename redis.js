@@ -59,8 +59,8 @@ function Redis(nWorker, auth) {
 
   // Only masters can accept write requests, so for simplicity, allowFrom
   // only connects other services to the master.
-  this.allowFrom = function allowFrom(src, allowPort) {
-    this.master.allowFrom(src, allowPort);
+  this.allowFrom = function allowFrom(src) {
+    this.master.allowFrom(src, port);
   };
 }
 
