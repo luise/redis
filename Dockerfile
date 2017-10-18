@@ -6,7 +6,8 @@ COPY start.go /
 RUN apt-get -y update \
 && apt-get install -y golang-go \
 && go build -o /start /start.go \
-&& apt-get remove --purge -y golang-go $(apt-mark showauto) \
+&& apt-get remove --purge -y golang-go \
+&& apt-get autoremove --purge -y \
 && rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT ["/start"]
