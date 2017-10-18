@@ -1,7 +1,7 @@
-const { Container, allow } = require('@quilt/quilt');
+const { Container, allow } = require('kelda');
 
 const port = 6379;
-const image = 'quilt/redis';
+const image = 'keldaio/redis';
 
 /**
  * Creates a master Redis container.

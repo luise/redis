@@ -1,4 +1,4 @@
-const { Machine, createDeployment, githubKeys } = require('@quilt/quilt');
+const { Machine, createDeployment, githubKeys } = require('kelda');
 const Redis = require('./redis.js');
 
 const deployment = createDeployment();

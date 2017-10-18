@@ -1,10 +1,10 @@
 {
-  "name": "@quilt/redis",
+  "name": "@kelda/redis",
   "version": "0.1.0",
   "main": "./redis.js",
   "license": "MIT",
   "dependencies": {
-    "@quilt/quilt": "quilt/quilt"
+    "kelda": "0.x"
   },
   "devDependencies": {
     "eslint": "^4.4.1",
