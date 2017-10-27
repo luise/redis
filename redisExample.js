@@ -1,7 +1,5 @@
-const { Machine, createDeployment, githubKeys } = require('kelda');
+const { Machine, Infrastructure, githubKeys } = require('kelda');
 const Redis = require('./redis.js');
-
-const deployment = createDeployment();
 
 const nWorker = 2;
 
@@ -14,6 +12,5 @@ const baseMachine = new Machine({
   sshKeys: githubKeys('ejj'), // Replace with your GitHub username.
 });
 
-deployment.deploy(baseMachine.asMaster());
-deployment.deploy(baseMachine.asWorker().replicate(nWorker));
-rds.deploy(deployment);
+const infra = new Infrastructure(baseMachine, baseMachine.replicate(nWorker));
+rds.deploy(infra);
