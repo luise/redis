@@ -1,4 +1,4 @@
-const { Machine, Infrastructure, githubKeys } = require('kelda');
+const { Machine, Infrastructure } = require('kelda');
 const Redis = require('./redis.js');
 
 const nWorker = 2;
@@ -7,10 +7,7 @@ const nWorker = 2;
 // the redis connection
 const rds = new Redis(nWorker, 'AUTH_PASSWORD');
 
-const baseMachine = new Machine({
-  provider: 'Amazon',
-  sshKeys: githubKeys('ejj'), // Replace with your GitHub username.
-});
+const baseMachine = new Machine({ provider: 'Amazon' });
 
 const infra = new Infrastructure(baseMachine, baseMachine.replicate(nWorker));
 rds.deploy(infra);
