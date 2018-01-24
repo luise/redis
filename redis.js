@@ -1,4 +1,4 @@
-const { Container, allow } = require('kelda');
+const { Container, allowTraffic } = require('kelda');
 
 const port = 6379;
 const image = 'keldaio/redis';
@@ -49,18 +49,18 @@ function createWorkers(n, auth, master) {
 function Redis(nWorker, auth) {
   this.master = createMaster(auth);
   this.workers = createWorkers(nWorker, auth, this.master);
-  this.master.allowFrom(this.workers, port);
-  allow(this.master, this.workers, port);
+  allowTraffic(this.workers, this.master, port);
+  allowTraffic(this.master, this.workers, port);
 
   this.deploy = function deploy(deployment) {
     this.master.deploy(deployment);
     this.workers.forEach(worker => worker.deploy(deployment));
   };
 
-  // Only masters can accept write requests, so for simplicity, allowFrom
+  // Only masters can accept write requests, so for simplicity, allowTrafficFrom
   // only connects other services to the master.
-  this.allowFrom = function allowFrom(src) {
-    this.master.allowFrom(src, port);
+  this.allowTrafficFrom = function allowTrafficFrom(src) {
+    allowTraffic(src, this.master, port);
   };
 }
 
