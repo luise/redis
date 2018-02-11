@@ -9,7 +9,9 @@ const image = 'keldaio/redis';
  * @return {Container} The Redis master container.
  */
 function createMaster(auth) {
-  return new Container('redis-master', image, {
+  return new Container({
+    name: 'redis-master',
+    image,
     command: ['run'],
     env: {
       ROLE: 'master',
@@ -29,7 +31,9 @@ function createWorkers(n, auth, master) {
   const workers = [];
   for (let i = 0; i < n; i += 1) {
     workers.push(
-      new Container('redis-wk', image, {
+      new Container({
+        name: 'redis-wk',
+        image,
         command: ['run'],
         env: {
           ROLE: 'worker',

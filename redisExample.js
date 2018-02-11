@@ -9,5 +9,8 @@ const rds = new Redis(nWorker, 'AUTH_PASSWORD');
 
 const baseMachine = new Machine({ provider: 'Amazon' });
 
-const infra = new Infrastructure(baseMachine, baseMachine.replicate(nWorker));
+const infra = new Infrastructure({
+  masters: baseMachine,
+  workers: baseMachine.replicate(nWorker),
+});
 rds.deploy(infra);
